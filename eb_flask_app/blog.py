@@ -1,3 +1,4 @@
+import codecs
 from os import listdir
 
 
@@ -9,6 +10,7 @@ def construct_blog_posts(path):
 
     blog_posts = []
     filenames = listdir(path)
+    filenames.remove('.DS_Store')
 
     for post in filenames:
         split_filename = chomp_md(post).split('-')
@@ -17,9 +19,12 @@ def construct_blog_posts(path):
         post_info['date'] = '-'.join(split_filename[:3])
         post_info['title'] = ' '.join(split_filename[3:])
 
-        with open(path + post, 'r') as f:
+        with codecs.open(path + post, 'r', encoding='utf-8') as f:
             post_info['text'] = f.read()
 
         blog_posts.append(post_info)
 
     return blog_posts
+
+if __name__ == '__main__':
+    print construct_blog_posts('static/assets/posts/')
